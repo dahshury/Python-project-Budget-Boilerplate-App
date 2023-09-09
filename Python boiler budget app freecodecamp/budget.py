@@ -150,7 +150,7 @@ def create_spend_chart(categories):
         
         
         if total_withdrawal != 0:
-            withdrawal_percentage_per_cat[category] = round((sum([item["amount"] for item in category.ledger if item["amount"] < 0]) / total_withdrawal)* 100 / 10) * 10 
+            withdrawal_percentage_per_cat[category] = ((sum([item["amount"] for item in category.ledger if item["amount"] < 0]) / total_withdrawal)* 100 // 10) * 10 
             
         else:
             withdrawal_percentage_per_cat[category] = 0
@@ -162,7 +162,9 @@ def create_spend_chart(categories):
             line_creator[i] = " "*(4-len(line_creator[i])) + line_creator[i]
             
         for j, category in enumerate(categories):
-            line_creator[i] += ((" "*(1 if j==0 else 2)) + ("o" if withdrawal_percentage_per_cat[category] >= (100-(i*10)) else " "))
+            line_creator[i] += (" "*(1 if j==0 else 2)) +("o" if withdrawal_percentage_per_cat[category] >= (100-(i*10)) else " ")
+                                
+        line_creator[i] += (" "*2)
 
         
     top_lines = "\n".join(line_creator) +"\n"
@@ -187,17 +189,15 @@ def create_spend_chart(categories):
 
     
 # Self tests:
-# food = Category("Food")
-# entertainment = Category("Entertainment")
-# business = Category("Business")
-# food.deposit(900, "deposit")
-# entertainment.deposit(900, "deposit")
-# business.deposit(900, "deposit")
-# food.withdraw(105.55)
-# entertainment.withdraw(33.40)
-# business.withdraw(10.99)
-# create_spend_chart([business, food, entertainment])
+food = Category("Food")
+entertainment = Category("Entertainment")
+business = Category("Business")
+food.deposit(900, "deposit")
+entertainment.deposit(900, "deposit")
+business.deposit(900, "deposit")
+food.withdraw(105.55)
+entertainment.withdraw(33.40)
+business.withdraw(10.99)
+create_spend_chart([business, food, entertainment])
 
-# categories = ['food', 'entertainment','Hello']
-# create_spend_chart(categories)
         
